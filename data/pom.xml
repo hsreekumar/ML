@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>flink</groupId>
+	<artifactId>data</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>sample</name>
+	<description>data</description>
+
+	<parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+	<properties>
+        <java.version>11</java.version>
+        <spring.boot.version>2.5.4</spring.boot.version>
+        <flink.version>1.14.0</flink.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java_2.12</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients_2.12</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <!-- Other dependencies -->
+        <dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <argLine>
+                        --add-opens=java.base/java.lang=ALL-UNNAMED
+                        --add-opens=java.base/java.util=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
