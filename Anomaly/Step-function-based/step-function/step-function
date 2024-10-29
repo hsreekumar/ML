@@ -1,0 +1,48 @@
+{
+  "Comment": "Step function to trigger ECS task for SQS consumption",
+  "StartAt": "PollSQS",
+  "States": {
+    "PollSQS": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:339712893183:function:sqsPoll",
+      "Next": "CheckBatchSize"
+    },
+    "CheckBatchSize": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.batch_size",
+          "NumericGreaterThan": 0,
+          "Next": "TriggerECSTask"
+        }
+      ],
+      "Default": "EndState"
+    },
+    "TriggerECSTask": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::ecs:runTask.sync",
+      "Parameters": {
+        "Cluster": "anomaly-ecs-cluster",
+        "TaskDefinition": "anomaly-ecs-sqs:1",
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "Subnets": [
+              "subnet-03462c08e319131f1",
+              "subnet-04391706cd4bd0ebd",
+              "subnet-0c2bcd0151fbd988b",
+              "subnet-0531280d024484280",
+              "subnet-07f304d923bd86be4",
+              "subnet-05418f3e953e1e822"
+            ],
+            "AssignPublicIp": "ENABLED"
+          }
+        }
+      },
+      "End": true
+    },
+    "EndState": {
+      "Type": "Succeed"
+    }
+  }
+}
